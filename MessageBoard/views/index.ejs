@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Message Board</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+ </head>
+  <body style="width:70%; display:block; margin:0auto;">
+    <h1>The Message Board</h1>
+
+    <form action="/create_message" method="POST">
+        <label>Name: </label> <input type="text" name="name"><br>
+        <textarea rows="4" cols="50" placeholder="Share something with the world" name="message"></textarea>
+        <br>
+        <input type="submit" value="Post Message" name="submit" class="btn-success">
+    </form>
+
+	 <% if(typeof(errors) != 'undefined' ) { %>
+	     <% for (var x in errors) { %>
+	      <h3><%= errors[x].message %></h3>
+	     <% } %>
+ 	 <% } %>
+      
+    <br>
+    <hr>
+
+        <% for(var i = 0; i < allMessages.length; i++) { %>
+        
+            <h4><%= allMessages[i].message %></h4>
+            -posted by <b><%= allMessages[i].name %></b> on <i><%= allMessages[i].createdAt %></i>
+            <br><br>
+
+                <% for (var j = 0; j < allMessages[i].comments.length; j++) { %>
+                    <p><strong><%= allMessages[i].comments[j].name %></strong> at <i><%= allMessages[i].comments[j].createdAt %></i></p>
+                    <p><%= allMessages[i].comments[j].comment %></p>
+                <% } %>
+  
+                <div class="comment_form">
+                    <form action="/create_comment/<%= allMessages[i].id %>" method="POST">
+                        <label>Name: </label> <input type="text" name="name"><br>
+                        <textarea rows="4" cols="50" placeholder="And what do you have to say about that?" name="comment"></textarea>
+                        <br>
+                        <input type="submit" value="Post Comment" name="submit" class="btn-success">
+                    </form>
+                </div>
+            <hr>
+        <% } %>
+
+
+        <a href="/"><button class="btn-default">HOME</button></a>
+  </body>
+</html>
